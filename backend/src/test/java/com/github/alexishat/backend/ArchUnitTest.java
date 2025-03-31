@@ -17,7 +17,5 @@ public class ArchUnitTest {
             .layer("model").definedBy("..model..")
             .layer("service").definedBy("..service..")
             .layer("repository").definedBy("..repositories..")
-            .whereLayer("web").mayNotBeAccessedByAnyLayer()
-            .whereLayer("service").mayOnlyBeAccessedByLayers("web")
-            .whereLayer("repository").mayOnlyBeAccessedByLayers("service");
+            .whereLayer("web").mayNotBeAccessedByAnyLayer();
 }

@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.nio.CharBuffer;
 import java.util.Optional;
 
 @Service
@@ -48,10 +47,9 @@ public class UserService {
         if (byUsername.isPresent()) {
             throw new AppException("Username existiert bereits", HttpStatus.BAD_REQUEST);
         }
+        registerDto.setPassword(passwordEncoder.encode(registerDto.getPassword()));
 
         User user = userMapper.registerToUser(registerDto);
-
-        user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
 
         User savedUser = userRepository.save(user);
 

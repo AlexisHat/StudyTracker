@@ -10,7 +10,7 @@ import org.mapstruct.Mapping;
 public interface UserMapper {
     UserDto toUserDto(User user);
 
-    @Mapping(target = "password", ignore = true)
+    @Mapping(target = "id", ignore = true)
     User registerToUser(RegisterDto registerDto);
 }
 

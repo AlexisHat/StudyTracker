@@ -16,3 +16,7 @@ spring:
 logging:
   level:
     org.hibernate.orm.connections.pooling: OFF
+
+jwt:
+  secret: blablablasexwerdasliestistblöd1234567890420
+  expiration: 3600000

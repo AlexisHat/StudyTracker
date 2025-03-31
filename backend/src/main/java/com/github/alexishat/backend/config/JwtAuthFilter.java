@@ -16,8 +16,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtUtil userAuthProvider;
 
-
-
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,

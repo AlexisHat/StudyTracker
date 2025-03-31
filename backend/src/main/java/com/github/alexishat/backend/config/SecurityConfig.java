@@ -1,5 +1,6 @@
 package com.github.alexishat.backend.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -12,13 +13,11 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final UserAuthenticationEntryPoint userAuthenticationEntryPoint;
-
-    public SecurityConfig(UserAuthenticationEntryPoint userAuthenticationEntryPoint) {
-        this.userAuthenticationEntryPoint = userAuthenticationEntryPoint;
-    }
+    private final JwtUtil jwtUtil;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -30,7 +29,7 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(AbstractHttpConfigurer::disable)
-                .addFilterBefore(new JwtAuthFilter(), BasicAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthFilter(jwtUtil), BasicAuthenticationFilter.class);
         return http.build();
     }
 }

@@ -1,9 +1,11 @@
 package com.github.alexishat.backend.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Table(name = "users")
 @Entity
+@Data
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

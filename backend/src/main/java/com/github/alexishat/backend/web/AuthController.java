@@ -16,14 +16,14 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 
-@RestController("/api/auth")
+@RestController()
 @RequiredArgsConstructor
 public class AuthController {
 
     private final UserService userService;
     private final JwtUtil tokenService;
 
-    @PostMapping("/login")
+    @PostMapping("/api/auth/login")
     public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
         UserDto userDto = userService.login(loginDto);
         return ResponseEntity.ok(tokenService.generateToken(userDto.getUsername()));

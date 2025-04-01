@@ -1,5 +1,6 @@
-package com.github.alexishat.backend;
+package com.github.alexishat.backend.architektur;
 
+import com.github.alexishat.backend.BackendApplication;
 import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;

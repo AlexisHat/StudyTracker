@@ -29,7 +29,7 @@ public class AuthController {
         return ResponseEntity.ok(tokenService.generateToken(userDto.getUsername()));
     }
 
-    @PostMapping("/register")
+    @PostMapping("/api/auth/register")
     public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) {
 
             UserDto userDto = userService.register(registerDto);

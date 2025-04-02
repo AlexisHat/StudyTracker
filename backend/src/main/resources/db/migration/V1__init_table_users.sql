@@ -1,6 +1,6 @@
 CREATE TABLE users
 (
-    id        BIGINT       NOT NULL,
+    id        BIGSERIAL    NOT NULL,
     email     VARCHAR(255) NOT NULL,
     full_name VARCHAR(255) NOT NULL,
     username  VARCHAR(255) NOT NULL,

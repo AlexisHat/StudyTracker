@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { LoginData, RegisterData } from "../types/auth.types";
 import { login, register } from "../service/AuthService";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [mode, setMode] = useState<"login" | "register">("login");
   const isLogin = mode === "login";
+  const navigate = useNavigate();
 
   const [loginData, setLoginData] = useState<LoginData>({
     username: "",
@@ -22,7 +24,9 @@ function Login() {
     event.preventDefault();
     try {
       const response = await login(loginData);
+
       console.log("Login erfolgreich:", response.data);
+      navigate("/");
     } catch (error) {
       console.error("Login-Fehler:", error);
     }
@@ -33,6 +37,7 @@ function Login() {
     try {
       const response = await register(registerData);
       console.log("Registrierung erfolgreich:", response.data);
+      navigate("/");
     } catch (error) {
       console.error("Registrierungs-Fehler:", error);
     }

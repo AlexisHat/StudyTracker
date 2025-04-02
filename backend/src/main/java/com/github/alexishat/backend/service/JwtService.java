@@ -1,7 +1,6 @@
-package com.github.alexishat.backend.config;
+package com.github.alexishat.backend.service;
 
 import com.github.alexishat.backend.dtos.UserDto;
-import com.github.alexishat.backend.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -12,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
@@ -20,17 +19,17 @@ import java.util.Collections;
 import java.util.Date;
 
 
-@Component
+@Service
 @RequiredArgsConstructor
-public class JwtUtil {
+public class JwtService {
 
     @Value("${jwt.secret}")
-    private String jwtSecret;
+    String jwtSecret;
 
     @Value("${jwt.expiration}")
-    private Long jwtExpirationTime;
+    Long jwtExpirationTime;
 
-    private Key key;
+    Key key;
 
     private final UserService userService;
 
@@ -70,5 +69,4 @@ public class JwtUtil {
             throw new RuntimeException("Invalid JWT token");
         }
     }
-
 }

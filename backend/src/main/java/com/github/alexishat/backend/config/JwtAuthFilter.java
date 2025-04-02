@@ -1,5 +1,6 @@
 package com.github.alexishat.backend.config;
 
+import com.github.alexishat.backend.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,7 +15,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-    private final JwtUtil userAuthProvider;
+    private final JwtService userAuthProvider;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,

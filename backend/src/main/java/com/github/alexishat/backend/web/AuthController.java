@@ -1,14 +1,12 @@
 package com.github.alexishat.backend.web;
 
-import com.github.alexishat.backend.config.JwtUtil;
+import com.github.alexishat.backend.service.JwtService;
 import com.github.alexishat.backend.dtos.LoginDto;
 import com.github.alexishat.backend.dtos.RegisterDto;
 import com.github.alexishat.backend.dtos.UserDto;
 import com.github.alexishat.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.token.TokenService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +19,7 @@ import java.net.URI;
 public class AuthController {
 
     private final UserService userService;
-    private final JwtUtil tokenService;
+    private final JwtService tokenService;
 
     @PostMapping("/api/auth/login")
     public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {

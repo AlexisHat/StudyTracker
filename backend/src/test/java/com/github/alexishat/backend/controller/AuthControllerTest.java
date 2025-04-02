@@ -1,7 +1,7 @@
 package com.github.alexishat.backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.alexishat.backend.config.JwtUtil;
+import com.github.alexishat.backend.service.JwtService;
 import com.github.alexishat.backend.config.SecurityConfig;
 import com.github.alexishat.backend.config.UserAuthenticationEntryPoint;
 import com.github.alexishat.backend.dtos.LoginDto;
@@ -41,7 +41,7 @@ public class AuthControllerTest {
     private UserService userService;
 
     @MockitoBean
-    private JwtUtil tokenService;
+    private JwtService tokenService;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -74,7 +74,7 @@ public class AuthControllerTest {
         UserService mockService = mock(UserService.class);
         when(mockService.login(login)).thenThrow(new AppException("Unbekannter User", HttpStatus.NOT_FOUND));
 
-        AuthController controller = new AuthController(mockService, mock(JwtUtil.class));
+        AuthController controller = new AuthController(mockService, mock(JwtService.class));
 
         MockMvc build = MockMvcBuilders.standaloneSetup(controller)
                 .setControllerAdvice(RestControllerAdvice.class)

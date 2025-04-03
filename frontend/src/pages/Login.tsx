@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [mode, setMode] = useState<"login" | "register">("login");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const isLogin = mode === "login";
   const navigate = useNavigate();
 
@@ -22,13 +23,17 @@ function Login() {
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setErrorMessage(null);
     try {
       const response = await login(loginData);
 
       console.log("Login erfolgreich:", response.data);
       navigate("/");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Login-Fehler:", error);
+      setErrorMessage(
+        "Login fehlgeschlagen: Bitte Benutzername und Passwort überprüfen."
+      );
     }
   };
 
@@ -38,8 +43,13 @@ function Login() {
       const response = await register(registerData);
       console.log("Registrierung erfolgreich:", response.data);
       navigate("/");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Registrierungs-Fehler:", error);
+      const backendMessage = error?.response?.data?.message;
+      setErrorMessage(
+        backendMessage ||
+          "Registrierung fehlgeschlagen. Bitte versuche es erneut."
+      );
     }
   };
 
@@ -53,18 +63,30 @@ function Login() {
           <button
             type="button"
             className={`btn ${isLogin ? "btn-primary" : "btn-light"} w-50 me-1`}
-            onClick={() => setMode("login")}
+            onClick={() => {
+              setMode("login");
+              setErrorMessage(null);
+            }}
           >
             Login
           </button>
           <button
             type="button"
             className={`btn ${isLogin ? "btn-light" : "btn-primary"} w-50 ms-1`}
-            onClick={() => setMode("register")}
+            onClick={() => {
+              setMode("register");
+              setErrorMessage(null);
+            }}
           >
             Registrierung
           </button>
         </div>
+
+        {errorMessage && (
+          <div className="alert alert-danger text-center" role="alert">
+            {errorMessage}
+          </div>
+        )}
 
         <h2 className="text-center mb-4">
           {isLogin ? "Login" : "Registrierung"}

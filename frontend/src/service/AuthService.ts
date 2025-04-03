@@ -1,4 +1,4 @@
-import authApi from "../api/api"
+import {authApi} from "../api/api"
 import { RegisterData, LoginData } from "../types/auth.types";
 
 export const login = (data: LoginData) => {

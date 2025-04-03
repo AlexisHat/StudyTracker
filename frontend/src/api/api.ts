@@ -15,7 +15,7 @@ export const protectedApi = axios.create({
   headers:{
     "Content-Type": "application/json",
   }
-})
+});
 
 protectedApi.interceptors.request.use(
   (config) => {

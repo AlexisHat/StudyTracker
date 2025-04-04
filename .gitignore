@@ -37,6 +37,7 @@ backend/.settings/
 backend/HELP.md
 backend/build/
 backend/.env
+backend/data/
 !backend/gradle/wrapper/gradle-wrapper.jar
 
 # === Build Output (Java, optional) ===

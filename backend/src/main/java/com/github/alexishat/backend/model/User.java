@@ -3,6 +3,8 @@ package com.github.alexishat.backend.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Table(name = "users")
 @Entity
 @Data
@@ -23,4 +25,7 @@ public class User {
 
     @Column(nullable = false)
     private String password;
+
+    @OneToMany(mappedBy = "user")
+    private List<Session> sessions;
 }

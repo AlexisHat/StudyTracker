@@ -1,6 +1,7 @@
 package com.github.alexishat.backend.service;
 
 import com.github.alexishat.backend.model.Topic;
+import com.github.alexishat.backend.model.User;
 import com.github.alexishat.backend.repositories.TopicRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,5 +19,12 @@ public class TopicService {
         return topicRepository.findByUserId(userId).stream()
                 .map(Topic::getName)
                 .collect(Collectors.toSet());
+    }
+
+    public void createNewTopicForUser(String newTopic, User user) {
+        Topic topic = new Topic();
+        topic.setName(newTopic);
+        topic.setUser(user);
+        topicRepository.save(topic);
     }
 }

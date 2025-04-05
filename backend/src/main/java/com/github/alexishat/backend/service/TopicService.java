@@ -21,10 +21,16 @@ public class TopicService {
                 .collect(Collectors.toSet());
     }
 
-    public void createNewTopicForUser(String newTopic, User user) {
+    public Topic createNewTopicForUser(String newTopic, User user) {
         Topic topic = new Topic();
         topic.setName(newTopic);
         topic.setUser(user);
-        topicRepository.save(topic);
+        return topicRepository.save(topic);
+    }
+
+    public Topic findByNameAndUser(String topic, User user) {
+        return topicRepository.findByUserId(user.getId()).stream()
+                .filter(t->t.getName().equals(topic))
+                .findFirst().orElse(null);
     }
 }

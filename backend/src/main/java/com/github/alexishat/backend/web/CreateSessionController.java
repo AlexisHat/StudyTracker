@@ -2,15 +2,19 @@ package com.github.alexishat.backend.web;
 
 import com.github.alexishat.backend.dtos.SessionDto;
 import com.github.alexishat.backend.dtos.UserDto;
+import com.github.alexishat.backend.exceptions.SessionValidException;
 import com.github.alexishat.backend.model.Session;
 import com.github.alexishat.backend.model.Topic;
 import com.github.alexishat.backend.model.User;
 import com.github.alexishat.backend.service.SessionService;
 import com.github.alexishat.backend.service.TopicService;
 import com.github.alexishat.backend.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -34,28 +38,19 @@ public class CreateSessionController {
 
     @PostMapping("/sessions/create")
     public ResponseEntity<Integer> createSession(@AuthenticationPrincipal UserDto userDto,
-                                                 @RequestBody SessionDto session) {
-
-        if ((session.getNewTopic() == null) == (session.getTopic() == null)) {
-            return ResponseEntity.badRequest().build(); // Entweder oder, nicht beides oder keins
+                                                 @Valid @RequestBody SessionDto session,
+                                                 BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new SessionValidException(bindingResult);
         }
 
-        User user = userService.findByUsername(userDto.getUsername());
-        Topic topic;
-
-        if (session.getNewTopic() != null) {
-            topic = topicService.createNewTopicForUser(session.getNewTopic(), user);
-        } else {
-            topic = topicService.findByNameAndUser(session.getTopic(), user);
-        }
-
-        Session createdSession = sessionService.create(session, user, topic);
+        int sessionId = sessionService.createSessionWithTopicChoice(session, userDto.getUsername());
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(createdSession.getId())
+                .buildAndExpand(sessionId)
                 .toUri();
 
-        return ResponseEntity.created(location).body(createdSession.getId());
+        return ResponseEntity.created(location).body(sessionId);
     }
 }

@@ -23,7 +23,7 @@ public class RestControllerAdvice {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGeneralException(Exception ex) {
-        return new ResponseEntity<>("Ein unerwarteter Fehler ist aufgetreten.", HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>("Ein unerwarteter Fehler ist aufgetreten." + ex.getMessage() +ex.getCause(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(SessionModusException.class)

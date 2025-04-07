@@ -3,6 +3,7 @@ import { LoginData, RegisterData } from "../types/auth.types";
 import { login, register } from "../service/AuthService";
 import { useNavigate } from "react-router-dom";
 import { setToken } from "../utils/auth";
+import FormLogicViolationAlert from "../components/FormLogicViolationAlert";
 
 function Login() {
   const [mode, setMode] = useState<"login" | "register">("login");
@@ -85,11 +86,7 @@ function Login() {
           </button>
         </div>
 
-        {errorMessage && (
-          <div className="alert alert-danger text-center" role="alert">
-            {errorMessage}
-          </div>
-        )}
+        <FormLogicViolationAlert message={errorMessage} />
 
         <h2 className="text-center mb-4">
           {isLogin ? "Login" : "Registrierung"}

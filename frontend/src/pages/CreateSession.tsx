@@ -3,6 +3,7 @@ import { getTopics, sendSession } from "../service/TopicService";
 import { CreateSessionData } from "../types/session.types";
 import { useNavigate } from "react-router-dom";
 import LogoutButton from "../components/LogoutButton";
+import FormLogicViolationAlert from "../components/FormLogicViolationAlert";
 function CreateSession() {
   const [topics, setTopics] = useState<string[]>([]);
   const [createSessionData, setCreateSessionData] = useState<CreateSessionData>(
@@ -14,7 +15,31 @@ function CreateSession() {
     }
   );
 
+  const [errorZeitMessage, setErrorZeitMessage] = useState<string | null>(null);
+  const [sendErrorMessage, setSendErrorMessage] = useState<string | null>(null);
+
   const navigate = useNavigate();
+
+  const checkIfZeitViolation = () => {
+    const start = new Date(createSessionData.startzeit);
+    const end = new Date(createSessionData.endzeit);
+    const diffMs = end.getTime() - start.getTime();
+    if (!(start < end)) {
+      setErrorZeitMessage(
+        "Die Startzeit darf nicht nach dem Endzeitpunkt liegen."
+      );
+    } else if (diffMs / (1000 * 60 * 60) > 10) {
+      setErrorZeitMessage(
+        "Sicher das die Session länger als 10h am Stück war? :D"
+      );
+    } else {
+      setErrorZeitMessage(null);
+    }
+  };
+
+  useEffect(() => {
+    checkIfZeitViolation();
+  }, [createSessionData.startzeit, createSessionData.endzeit]);
 
   useEffect(() => {
     getTopics()
@@ -27,6 +52,11 @@ function CreateSession() {
   const handleSubmitSession = async (
     event: React.FormEvent<HTMLFormElement>
   ) => {
+    if (errorZeitMessage) {
+      setSendErrorMessage(
+        "Nur valiede Zeiten dürchen gesendet werden bitte überprüfe die eingaben!"
+      );
+    }
     event.preventDefault();
     try {
       const response = await sendSession(createSessionData);
@@ -34,6 +64,7 @@ function CreateSession() {
       navigate("/");
     } catch (error) {
       console.log("Fehler beim Erstellen der Session", error);
+      setSendErrorMessage("Fehler beim absenden überprüfe die Daten erneut");
     }
   };
 
@@ -115,7 +146,6 @@ function CreateSession() {
           </div>
         )}
 
-        {/* Bestehendes Fach */}
         {createSessionData.modus === "vorhanden" && (
           <div className="mb-3">
             <label htmlFor="fach" className="form-label">
@@ -154,12 +184,12 @@ function CreateSession() {
             name="startzeit"
             className="form-control"
             value={createSessionData.startzeit}
-            onChange={(e) =>
+            onChange={(e) => {
               setCreateSessionData({
                 ...createSessionData,
                 startzeit: e.target.value,
-              })
-            }
+              });
+            }}
             required
           />
         </div>
@@ -174,14 +204,18 @@ function CreateSession() {
             name="endzeit"
             className="form-control"
             value={createSessionData.endzeit}
-            onChange={(e) =>
+            onChange={(e) => {
               setCreateSessionData({
                 ...createSessionData,
                 endzeit: e.target.value,
-              })
-            }
+              });
+            }}
             required
           />
+        </div>
+
+        <div className="p-1 mt-2">
+          <FormLogicViolationAlert message={errorZeitMessage} />
         </div>
 
         <div className="d-flex justify-content-between">
@@ -195,6 +229,9 @@ function CreateSession() {
           >
             Zurück zur Startseite
           </button>
+          <div className="alert alert-danger mt-2" role="alert">
+            {sendErrorMessage}
+          </div>
         </div>
       </form>
     </div>

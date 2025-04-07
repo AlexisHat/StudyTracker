@@ -12,6 +12,9 @@ function Home() {
           Zum Login
         </Link>
         {isLoggedIn() && <LogoutButton />}
+        <Link to="/create-session" className="btn btn-primary me-3">
+          Eine neue Session
+        </Link>
       </div>
     </div>
   );

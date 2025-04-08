@@ -15,6 +15,9 @@ function Home() {
         <Link to="/create-session" className="btn btn-primary me-3">
           Eine neue Session
         </Link>
+        <Link to="/sessions/overview" className="btn btn-primary me-3">
+          Overview
+        </Link>
       </div>
     </div>
   );

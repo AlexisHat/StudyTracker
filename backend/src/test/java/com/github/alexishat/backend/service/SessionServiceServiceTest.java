@@ -7,10 +7,12 @@ import com.github.alexishat.backend.model.User;
 import com.github.alexishat.backend.repositories.SessionRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.testcontainers.context.ImportTestcontainers;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@ImportTestcontainers
 public class SessionServiceServiceTest{
 
 

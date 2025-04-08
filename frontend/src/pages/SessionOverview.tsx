@@ -1,4 +1,4 @@
-import SessionHeatmap from "../components/SessionHeatmap";
+import SessionHeatmap from "../components/heatmap/SessionHeatmap";
 
 const SessionOverview = () => {
   return (

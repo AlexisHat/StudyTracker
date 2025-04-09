@@ -1,7 +1,14 @@
-import React from "react";
 import { generateHeatmapCells } from "../../utils/heatmapUtils";
 
-const SessionHeatmap: React.FC = () => {
+type Props = {
+  year: string;
+};
+
+const SessionHeatmap = ({ year }: Props) => {
+  const weekDayOfFistJan = new Date(`${year}-01-01`).getDay();
+
+  console.log(weekDayOfFistJan);
+
   const weeks = 52;
   const days = 7;
   const total = 365;

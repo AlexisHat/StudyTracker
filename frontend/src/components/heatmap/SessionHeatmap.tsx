@@ -5,15 +5,15 @@ type Props = {
 };
 
 const SessionHeatmap = ({ year }: Props) => {
-  const weekDayOfFistJan = new Date(`${year}-01-01`).getDay();
-
-  console.log(weekDayOfFistJan);
-
-  const weeks = 52;
+  const weekDayOfFirstJan = new Date(`${year}-01-01`).getDay();
+  const parsedYear = parseInt(year, 10);
+  const isLeap =
+    (parsedYear % 4 === 0 && parsedYear % 100 !== 0) || parsedYear % 400 === 0;
+  const totalDays = isLeap ? 366 : 365;
   const days = 7;
-  const total = 365;
+  const weeks = Math.ceil((totalDays + weekDayOfFirstJan + 1) / days);
 
-  const cells = generateHeatmapCells(weeks, days, total);
+  const cells = generateHeatmapCells(weeks, days, totalDays, weekDayOfFirstJan);
 
   return (
     <div

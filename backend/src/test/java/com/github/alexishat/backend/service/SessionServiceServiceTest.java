@@ -7,11 +7,14 @@ import com.github.alexishat.backend.model.User;
 import com.github.alexishat.backend.repositories.SessionRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.testcontainers.context.ImportTestcontainers;
-import org.springframework.context.annotation.Import;
 
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -30,5 +33,24 @@ public class SessionServiceServiceTest{
         Session created = service.create(SessionDto.builder().build(), new User(), new Topic());
 
         verify(sessionRepository, times(1)).save(any());
+    }
+
+    @Test
+    @DisplayName("get Minutes for every day gibt eine Map zurück die überall 0 minuten hat außer wo eine Session vorhanden")
+    void test_02(){
+        SessionRepository sessionRepository = mock(SessionRepository.class);
+        UserService userService= mock(UserService.class);
+        TopicService topicService = mock(TopicService.class);
+        SessionService service = new SessionService(sessionRepository, userService, topicService);
+        Session session = Session.builder().startzeit(LocalDateTime.now()).endzeit(LocalDateTime.now().plusHours(2)).build();
+        User user = new User();
+        when(userService.findByUsername("bla")).thenReturn(user);
+        when(sessionRepository.findAllByUserAndYear(user,2025)).thenReturn(List.of(session));
+
+        Map<String, Integer> bla = service.getMinutesForEveryDayInTheYear("bla", 2025);
+
+        Integer in3Tagen = bla.get(LocalDate.now().plusDays(3).toString());
+        assertThat(in3Tagen).isEqualTo(0);
+        assertThat(bla.get(LocalDate.now().toString())).isEqualTo(120);
     }
 }

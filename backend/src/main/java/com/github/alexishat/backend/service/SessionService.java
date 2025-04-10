@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.time.LocalDate;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -55,11 +57,29 @@ public class SessionService {
         User byUsername = userService.findByUsername(username);
         List<Session> allByUserAndYear = sessionRepository.findAllByUserAndYear(byUsername, year);
 
-        return allByUserAndYear.stream()
+        Map<String, Integer> minutesPerDay = allByUserAndYear.stream()
                 .collect(Collectors.groupingBy(
                         s -> s.getEndzeit().toLocalDate().toString(),
                         Collectors.summingInt(s -> (int) Duration.between(s.getStartzeit(), s.getEndzeit()).toMinutes())
                 ));
+
+        return fillMissingDaysWithZero(year, minutesPerDay);
     }
+
+    private Map<String, Integer> fillMissingDaysWithZero(int year, Map<String, Integer> minutesPerDay) {
+        LocalDate start = LocalDate.of(year, 1, 1);
+        LocalDate end = LocalDate.of(year, 12, 31);
+
+        Map<String, Integer> completeMap = new LinkedHashMap<>();
+
+        while (!start.isAfter(end)) {
+            String dateKey = start.toString();
+            completeMap.put(dateKey, minutesPerDay.getOrDefault(dateKey, 0));
+            start = start.plusDays(1);
+        }
+
+        return completeMap;
+    }
+
 }
 

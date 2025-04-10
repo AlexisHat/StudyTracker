@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -52,5 +53,39 @@ public class SessionServiceServiceTest{
         Integer in3Tagen = bla.get(LocalDate.now().plusDays(3).toString());
         assertThat(in3Tagen).isEqualTo(0);
         assertThat(bla.get(LocalDate.now().toString())).isEqualTo(120);
+    }
+
+    @Test
+    @DisplayName("Die Map ist am ende sorted aufsteigend nach den Daten")
+    void test_03(){
+        SessionRepository sessionRepository = mock(SessionRepository.class);
+        UserService userService= mock(UserService.class);
+        TopicService topicService = mock(TopicService.class);
+        SessionService service = new SessionService(sessionRepository, userService, topicService);
+        User user = new User();
+        when(userService.findByUsername("bla")).thenReturn(user);
+
+        Map<String, Integer> bla = service.getMinutesForEveryDayInTheYear("bla", 2025);
+
+        List<String> dateList = bla.keySet().stream().toList();
+
+        assertThat(dateList).isEqualTo(dateList.stream().sorted().toList());
+    }
+
+    @Test
+    @DisplayName("Die Map ist am ende sorted aufsteigend nach den Daten also erste key ist 1. jan")
+    void test_04(){
+        SessionRepository sessionRepository = mock(SessionRepository.class);
+        UserService userService= mock(UserService.class);
+        TopicService topicService = mock(TopicService.class);
+        SessionService service = new SessionService(sessionRepository, userService, topicService);
+        User user = new User();
+        when(userService.findByUsername("bla")).thenReturn(user);
+
+        Map<String, Integer> bla = service.getMinutesForEveryDayInTheYear("bla", 2025);
+
+        List<String> list = bla.keySet().stream().toList();
+
+        assertThat(list.getFirst()).isEqualTo(LocalDate.of(2025,1,1).toString());
     }
 }

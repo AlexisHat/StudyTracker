@@ -10,6 +10,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class SessionService {
@@ -46,4 +51,15 @@ public class SessionService {
             return createdSession.getId();
         }
 
+    public Map<String, Integer> getMinutesForEveryDayInTheYear(String username, int year) {
+        User byUsername = userService.findByUsername(username);
+        List<Session> allByUserAndYear = sessionRepository.findAllByUserAndYear(byUsername, year);
+
+        return allByUserAndYear.stream()
+                .collect(Collectors.groupingBy(
+                        s -> s.getEndzeit().toLocalDate().toString(),
+                        Collectors.summingInt(s -> (int) Duration.between(s.getStartzeit(), s.getEndzeit()).toMinutes())
+                ));
     }
+}
+

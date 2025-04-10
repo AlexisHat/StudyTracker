@@ -43,16 +43,21 @@ public class SessionServiceServiceTest{
         UserService userService= mock(UserService.class);
         TopicService topicService = mock(TopicService.class);
         SessionService service = new SessionService(sessionRepository, userService, topicService);
-        Session session = Session.builder().startzeit(LocalDateTime.now()).endzeit(LocalDateTime.now().plusHours(2)).build();
+
+        LocalDate fixedDate = LocalDate.of(2025, 3, 4);
+        LocalDateTime fixedStart = fixedDate.atTime(12, 0);
+        LocalDateTime fixedEnd = fixedStart.plusHours(2);
+
+        Session session = Session.builder().startzeit(fixedStart).endzeit(fixedEnd).build();
         User user = new User();
         when(userService.findByUsername("bla")).thenReturn(user);
         when(sessionRepository.findAllByUserAndYear(user,2025)).thenReturn(List.of(session));
 
         Map<String, Integer> bla = service.getMinutesForEveryDayInTheYear("bla", 2025);
 
-        Integer in3Tagen = bla.get(LocalDate.now().plusDays(3).toString());
-        assertThat(in3Tagen).isEqualTo(0);
-        assertThat(bla.get(LocalDate.now().toString())).isGreaterThan(1);
+
+        assertThat(bla.get("2025-01-01")).isEqualTo(0);
+        assertThat(bla.get(fixedDate.toString())).isGreaterThan(1);
     }
 
     @Test

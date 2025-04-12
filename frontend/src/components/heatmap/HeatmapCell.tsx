@@ -13,9 +13,13 @@ const HeatmapCell: React.FC<HeatmapCellProps> = ({
   color,
   dayIndex,
 }) => {
+  const handleClick = () => {
+    console.log(dayIndex);
+  };
   return (
     <div
       key={dayIndex}
+      onClick={handleClick}
       style={{
         width: "15px",
         height: "15px",

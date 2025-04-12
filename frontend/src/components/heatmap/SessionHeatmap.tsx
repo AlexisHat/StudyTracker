@@ -24,7 +24,7 @@ const SessionHeatmap = ({ year }: Props) => {
     };
 
     loadSessions();
-  }, []);
+  }, [year]);
 
   const weekDayOfFirstJan = new Date(`${year}-01-01`).getDay();
   const isLeapYear = parseInt(year, 10) % 4;

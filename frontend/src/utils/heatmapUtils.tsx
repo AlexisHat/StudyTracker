@@ -10,48 +10,51 @@ export const generateHeatmapCells = (
 ) => {
   const firstDay = new Date(`${year}-01-01`);
   const cells = [];
+  let finished = false;
 
-  for (let col = 0; col < weeks; col++) {
+  for (let col = 0; col < weeks && !finished; col++) {
     for (let row = 0; row < days; row++) {
-      const dayIndex = col * days + row;
+      const cellIndex = col * days + row;
 
-      const currentDay = new Date(firstDay);
-      currentDay.setDate(currentDay.getDate() + dayIndex);
-      const dayIso = formatDateString(currentDay);
-      console.log(dayIso);
-      if (dayIndex >= totalDays + daysToSkipBeginning) break;
-      if (dayIndex < daysToSkipBeginning) {
+      if (cellIndex < daysToSkipBeginning) {
         cells.push(
           <HeatmapCell
-            key={dayIndex}
+            key={`placeholder-${cellIndex}`}
             col={col + 1}
             row={row + 1}
             color="transparent"
-            dayIndex={dayIndex}
+            dayIndex={-1}
           />
         );
       } else {
-        const duration = sessions.get(dayIso);
-        const color = getColorForDuration(duration ?? 0);
+        const realDayIndex = cellIndex - daysToSkipBeginning;
+        if (realDayIndex >= totalDays) {
+          finished = true;
+          break;
+        }
+        const currentDay = new Date(firstDay);
+        currentDay.setDate(firstDay.getDate() + realDayIndex);
+        const dayIso = formatDateString(currentDay);
+        const duration = sessions.get(dayIso) ?? 0;
+        const color = getColorForDuration(duration);
         cells.push(
           <HeatmapCell
-            key={dayIndex}
+            key={realDayIndex}
             col={col + 1}
             row={row + 1}
             color={color}
-            dayIndex={dayIndex}
+            dayIndex={realDayIndex}
           />
         );
       }
     }
   }
-
   return cells;
 };
 
 const getColorForDuration = (duration: number) => {
   if (duration === 0) {
-    return "#FFFFFF";
+    return "#000000";
   } else if (duration < 15) {
     return "#cae8ff";
   } else if (duration < 30) {
@@ -67,7 +70,7 @@ const getColorForDuration = (duration: number) => {
   } else if (duration < 240) {
     return "#004579";
   } else {
-    return "#FFFFFF";
+    return "#000000";
   }
 };
 

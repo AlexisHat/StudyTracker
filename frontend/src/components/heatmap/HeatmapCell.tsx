@@ -10,7 +10,7 @@ type HeatmapCellProps = {
 const HeatmapCell: React.FC<HeatmapCellProps> = ({
   col,
   row,
-  color = "blue",
+  color,
   dayIndex,
 }) => {
   return (

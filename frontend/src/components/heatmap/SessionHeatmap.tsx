@@ -12,7 +12,9 @@ type Props = {
 };
 
 type TooltipData = {
+  monthAsString: string;
   dayAsString: string;
+  duration: number;
   x: number;
   y: number;
 };
@@ -45,8 +47,10 @@ const SessionHeatmap = ({ year }: Props) => {
     const y = event.clientY;
     const firstDay = new Date(`${year}-01-01`);
     firstDay.setDate(firstDay.getDate() + dayIndex);
-    const dayAsString = formatDateString(firstDay);
-    setTooltipData({ dayAsString, x, y });
+    const monthAsString = firstDay.toLocaleString("de-DE", { month: "long" });
+    const dayAsString = firstDay.toLocaleString("de-DE", { day: "2-digit" });
+    const duration = sessions.get(formatDateString(firstDay)) ?? 0;
+    setTooltipData({ monthAsString, dayAsString, duration, x, y });
   };
 
   const handleLeaveCell = () => {
@@ -98,7 +102,8 @@ const SessionHeatmap = ({ year }: Props) => {
             zIndex: 1000,
           }}
         >
-          Am {tooltipData.dayAsString}: Sessions absolviert
+          Am {tooltipData.dayAsString} {tooltipData.monthAsString} hast du:{" "}
+          {tooltipData.duration} min geübt!
         </div>
       )}
     </div>

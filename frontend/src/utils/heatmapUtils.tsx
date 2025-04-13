@@ -6,7 +6,9 @@ export const generateHeatmapCells = (
   totalDays: number,
   daysToSkipBeginning: number,
   year: string,
-  sessions: Map<string, number>
+  sessions: Map<string, number>,
+  onHoverCell?: (dayIndex: number, event: React.MouseEvent) => void,
+  onLeaveCell?: () => void
 ) => {
   const firstDay = new Date(`${year}-01-01`);
   const cells = [];
@@ -44,6 +46,8 @@ export const generateHeatmapCells = (
             row={row + 1}
             color={color}
             dayIndex={realDayIndex}
+            onHoverCell={onHoverCell}
+            onLeaveCell={onLeaveCell}
           />
         );
       }

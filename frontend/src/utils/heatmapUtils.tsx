@@ -10,7 +10,7 @@ export const generateHeatmapCells = (
   onHoverCell?: (dayIndex: number, event: React.MouseEvent) => void,
   onLeaveCell?: () => void
 ) => {
-  const firstDay = new Date(`${year}-01-01`);
+  const firstDay = new Date(parseInt(year, 10), 0, 1);
   const cells = [];
   let finished = false;
 
@@ -73,6 +73,10 @@ const getColorForDuration = (duration: number) => {
     return "#036ab7";
   } else if (duration < 240) {
     return "#004579";
+  } else if (duration < 345) {
+    return "#6010ac";
+  } else if (duration > 345) {
+    return "#FFD700";
   } else {
     return "#eeeeee";
   }
@@ -137,5 +141,8 @@ export const getWeekdayLabels = () =>
   ));
 
 export const formatDateString = (date: Date) => {
-  return date.toISOString().slice(0, 10);
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const day = date.getDate().toString().padStart(2, "0");
+  return `${year}-${month}-${day}`;
 };

@@ -45,7 +45,7 @@ const SessionHeatmap = ({ year }: Props) => {
   const handleHoverCell = (dayIndex: number, event: React.MouseEvent) => {
     const x = event.clientX;
     const y = event.clientY;
-    const firstDay = new Date(`${year}-01-01`);
+    const firstDay = new Date(parseInt(year, 10), 0, 1);
     firstDay.setDate(firstDay.getDate() + dayIndex);
     const monthAsString = firstDay.toLocaleString("de-DE", { month: "long" });
     const dayAsString = firstDay.toLocaleString("de-DE", { day: "2-digit" });

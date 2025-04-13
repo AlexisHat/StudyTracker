@@ -54,7 +54,7 @@ export const generateHeatmapCells = (
 
 const getColorForDuration = (duration: number) => {
   if (duration === 0) {
-    return "#000000";
+    return "#eeeeee";
   } else if (duration < 15) {
     return "#cae8ff";
   } else if (duration < 30) {
@@ -70,7 +70,7 @@ const getColorForDuration = (duration: number) => {
   } else if (duration < 240) {
     return "#004579";
   } else {
-    return "#000000";
+    return "#eeeeee";
   }
 };
 

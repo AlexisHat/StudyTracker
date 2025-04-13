@@ -26,6 +26,7 @@ const HeatmapCell: React.FC<HeatmapCellProps> = ({
         backgroundColor: color,
         gridColumn: col + 1,
         gridRow: row + 1,
+        borderRadius: "3px",
       }}
     />
   );

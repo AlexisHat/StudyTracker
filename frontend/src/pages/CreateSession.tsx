@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { getTopics, sendSession } from "../service/TopicService";
+import { getTopics } from "../service/TopicService";
 import { CreateSessionData } from "../types/session.types";
 import { useNavigate } from "react-router-dom";
 import LogoutButton from "../components/LogoutButton";
 import FormLogicViolationAlert from "../components/FormLogicViolationAlert";
+import { sendSession } from "../service/SessionService";
 function CreateSession() {
   const [topics, setTopics] = useState<string[]>([]);
   const [createSessionData, setCreateSessionData] = useState<CreateSessionData>(

@@ -9,6 +9,7 @@ import { getSessionsForYear } from "../../service/SessionService";
 
 type Props = {
   year: string;
+  onCellClick?: (dayIndex: number) => void;
 };
 
 type TooltipData = {
@@ -19,28 +20,17 @@ type TooltipData = {
   y: number;
 };
 
-const SessionHeatmap = ({ year }: Props) => {
+const SessionHeatmap = ({ year, onCellClick }: Props) => {
   const [sessions, setSessions] = useState<Map<string, number>>(new Map());
   const [tooltipData, setTooltipData] = useState<TooltipData | null>(null);
-
-  useEffect(() => {
-    const loadSessions = async () => {
-      try {
-        const data = await getSessionsForYear(year);
-        setSessions(data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    loadSessions();
-  }, [year]);
 
   const weekDayOfFirstJan = new Date(`${year}-01-01`).getDay();
   const isLeapYear = parseInt(year, 10) % 4;
   const totalDays = isLeapYear ? 366 : 365;
   const days = 7;
   const weeks = Math.ceil((totalDays + weekDayOfFirstJan + 1) / days);
+  const weekdayLabels = getWeekdayLabels();
+  const monthLabels = getMonthLabels(year, weekDayOfFirstJan);
 
   const handleHoverCell = (dayIndex: number, event: React.MouseEvent) => {
     const x = event.clientX;
@@ -57,6 +47,19 @@ const SessionHeatmap = ({ year }: Props) => {
     setTooltipData(null);
   };
 
+  useEffect(() => {
+    const loadSessions = async () => {
+      try {
+        const data = await getSessionsForYear(year);
+        setSessions(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    loadSessions();
+  }, [year]);
+
   const cells = generateHeatmapCells(
     weeks,
     days,
@@ -65,11 +68,9 @@ const SessionHeatmap = ({ year }: Props) => {
     year,
     sessions,
     handleHoverCell,
-    handleLeaveCell
+    handleLeaveCell,
+    onCellClick
   );
-
-  const weekdayLabels = getWeekdayLabels();
-  const monthLabels = getMonthLabels(year, weekDayOfFirstJan);
 
   return (
     <div style={{ position: "relative" }}>

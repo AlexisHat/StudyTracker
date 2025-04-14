@@ -8,7 +8,8 @@ export const generateHeatmapCells = (
   year: string,
   sessions: Map<string, number>,
   onHoverCell?: (dayIndex: number, event: React.MouseEvent) => void,
-  onLeaveCell?: () => void
+  onLeaveCell?: () => void,
+  onClickCell?: (dayIndex: number) => void
 ) => {
   const firstDay = new Date(parseInt(year, 10), 0, 1);
   const cells = [];
@@ -48,6 +49,7 @@ export const generateHeatmapCells = (
             dayIndex={realDayIndex}
             onHoverCell={onHoverCell}
             onLeaveCell={onLeaveCell}
+            onClickCell={onClickCell}
           />
         );
       }
@@ -145,4 +147,10 @@ export const formatDateString = (date: Date) => {
   const month = (date.getMonth() + 1).toString().padStart(2, "0");
   const day = date.getDate().toString().padStart(2, "0");
   return `${year}-${month}-${day}`;
+};
+
+export const getDayIso = (dayIndex: number, year: string): string => {
+  const firstDay = new Date(parseInt(year), 0, 1);
+  firstDay.setDate(firstDay.getDate() + dayIndex + 1);
+  return firstDay.toISOString().split("T")[0];
 };

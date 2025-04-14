@@ -15,3 +15,11 @@ export type CreateSessionData =
       endzeit: string;
       description?: string;
     };
+
+export type SessionDayOverview = {
+  topic: string;
+  duration: number;
+  description: string;
+  startTime: string;
+  endTime: string;
+}

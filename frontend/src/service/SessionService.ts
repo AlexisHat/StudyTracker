@@ -16,11 +16,25 @@ export const getSessionsForYear = async (year: string): Promise<Map<string, numb
     return result;
   };
 
-  export const sendSession = async (data: CreateSessionData) => {
+export const sendSession = async (data: CreateSessionData) => {
     try {
         const response = await protectedApi.post("/sessions/create", data);
     
         if (response.status === 201) {
+          return response.data;
+        } else {
+          console.error("Fehler: Unerwarteter Statuscode", response.status);
+        }
+      } catch (error) {
+        console.error("Fehler beim Senden der Session:", error);
+      }
+}
+
+export const getSessionsForDay = async (date: string) => {
+    try{
+      const response = await protectedApi.get(`/sessions/day?day=${date}`);
+
+     if (response.status === 200) {
           return response.data;
         } else {
           console.error("Fehler: Unerwarteter Statuscode", response.status);

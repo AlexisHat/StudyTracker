@@ -7,6 +7,7 @@ type HeatmapCellProps = {
   dayIndex: number;
   onHoverCell?: (dayIndex: number, event: React.MouseEvent) => void;
   onLeaveCell?: () => void;
+  onClickCell?: (dayIndex: number) => void;
 };
 
 const HeatmapCell: React.FC<HeatmapCellProps> = ({
@@ -16,11 +17,8 @@ const HeatmapCell: React.FC<HeatmapCellProps> = ({
   dayIndex,
   onHoverCell,
   onLeaveCell,
-}) => {
-  const handleClick = () => {
-    console.log(dayIndex);
-  };
-
+  onClickCell,
+}: HeatmapCellProps) => {
   const handleHover = (event: React.MouseEvent) => {
     if (onHoverCell) {
       onHoverCell(dayIndex, event);
@@ -36,7 +34,7 @@ const HeatmapCell: React.FC<HeatmapCellProps> = ({
   return (
     <div
       key={dayIndex}
-      onClick={handleClick}
+      onClick={() => dayIndex !== -1 && onClickCell?.(dayIndex)}
       onMouseEnter={handleHover}
       onMouseLeave={handleLeave}
       style={{

@@ -27,6 +27,8 @@ public class Session{
     @Column(nullable = false)
     private LocalDateTime endzeit;
 
+    private String description;
+
     @ManyToOne(optional = false)
     private User user;
 }

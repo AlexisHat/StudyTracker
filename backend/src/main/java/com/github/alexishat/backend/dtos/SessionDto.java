@@ -21,6 +21,7 @@ public class SessionDto {
     private String modus;
     private String newTopic;
     private String topic;
+    private String description;
     @NotNull
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime startzeit;

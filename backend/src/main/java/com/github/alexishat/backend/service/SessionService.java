@@ -1,5 +1,6 @@
 package com.github.alexishat.backend.service;
 
+import com.github.alexishat.backend.dtos.SessionDayDto;
 import com.github.alexishat.backend.dtos.SessionDto;
 import com.github.alexishat.backend.exceptions.SessionModusException;
 import com.github.alexishat.backend.model.Session;
@@ -12,10 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,6 +31,7 @@ public class SessionService {
         session.setUser(user);
         session.setStartzeit(sessionDto.getStartzeit());
         session.setEndzeit(sessionDto.getEndzeit());
+        session.setDescription(sessionDto.getDescription());
         return sessionRepository.save(session);
     }
 
@@ -82,6 +82,5 @@ public class SessionService {
 
         return completeMap;
     }
-
 }
 

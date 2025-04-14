@@ -12,6 +12,7 @@ function CreateSession() {
       newTopic: "",
       startzeit: "",
       endzeit: "",
+      description: "",
     }
   );
 
@@ -211,6 +212,25 @@ function CreateSession() {
               });
             }}
             required
+          />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="description" className="form-label">
+            Beschreibe die Lern-Session:
+          </label>
+          <input
+            type="text"
+            id="description"
+            name="description"
+            className="form-control"
+            value={createSessionData.description || ""}
+            onChange={(e) =>
+              setCreateSessionData({
+                ...createSessionData,
+                description: e.target.value,
+              })
+            }
           />
         </div>
 

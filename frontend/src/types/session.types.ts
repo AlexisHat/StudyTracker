@@ -5,6 +5,7 @@ export type CreateSessionData =
       topic?: never;
       startzeit: string;
       endzeit: string;
+      description?: string;
     }
   | {
       modus: "vorhanden";
@@ -12,4 +13,5 @@ export type CreateSessionData =
       topic: string;
       startzeit: string;
       endzeit: string;
+      description?: string;
     };

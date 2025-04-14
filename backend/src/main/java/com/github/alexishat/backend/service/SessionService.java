@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -81,6 +82,25 @@ public class SessionService {
         }
 
         return completeMap;
+    }
+
+    public List<SessionDayDto> getSessionInfoForDay(LocalDate day, String username) {
+        User user = userService.findByUsername(username);
+        LocalDateTime startOfDay = day.atStartOfDay();
+        LocalDateTime endOfDay = day.plusDays(1).atStartOfDay();
+        List<Session> allByUserAndDay = sessionRepository.findAllByUserAndDay(user, startOfDay, endOfDay);
+        List<SessionDayDto> sessionDayDtos = new ArrayList<>();
+        for (Session session : allByUserAndDay) {
+            SessionDayDto sessionDayDto = SessionDayDto.builder()
+                    .description(session.getDescription())
+                    .startTime(session.getStartzeit())
+                    .endTime(session.getEndzeit())
+                    .topic(session.getTopic().toString())
+                    .duration((int) session.getStartzeit().until(session.getEndzeit(), ChronoUnit.MINUTES))
+                    .build();
+            sessionDayDtos.add(sessionDayDto);
+        }
+        return sessionDayDtos;
     }
 }
 

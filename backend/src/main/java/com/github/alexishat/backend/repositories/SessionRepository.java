@@ -14,7 +14,7 @@ public interface SessionRepository extends JpaRepository<Session, Integer> {
     @Query("SELECT s FROM Session s WHERE s.user = :user AND YEAR(s.startzeit) = :year")
     List<Session> findAllByUserAndYear(@Param("user") User user, @Param("year") int year);
 
-    @Query("SELECT s FROM Session s WHERE s.user = :user AND s.endzeit >= :startOfDay AND s.endzeit < :startOfNextDay")
+    @Query("SELECT s FROM Session s WHERE s.user = :user AND s.endzeit >= :startOfDay AND s.endzeit < :startOfNextDay ORDER BY s.startzeit asc")
     List<Session> findAllByUserAndDay(@Param("user") User user,
                                                @Param("startOfDay") LocalDateTime startOfDay,
                                                @Param("startOfNextDay") LocalDateTime startOfNextDay);
